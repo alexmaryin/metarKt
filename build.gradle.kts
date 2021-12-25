@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform") version "1.6.10"
-    id("maven-publish")
+//    id("maven-publish")
+    id("convention.publication")
 }
 
 group = "alexmaryin.metarkt"
