@@ -4,7 +4,7 @@ plugins {
     id("convention.publication")
 }
 
-group = "alexmaryin.metarkt"
+group = "io.github.alexmaryin.metarkt"
 version = "1.0.0"
 
 repositories {

@@ -26,13 +26,13 @@ data class Wind(
         WindUnit.KPH -> (gusts * KPH_TO_KNOT).toInt()
     }
 
-    val speedMph: Int get() = when(speedUnits) {
+    val speedMps: Int get() = when(speedUnits) {
         WindUnit.KT -> (speed / METER_TO_KNOT).toInt()
         WindUnit.MPS -> speed
         WindUnit.KPH -> (speed / KPH_TO_KNOT).toInt()
     }
 
-    val gustsMph: Int get() = when(speedUnits) {
+    val gustsMps: Int get() = when(speedUnits) {
         WindUnit.KT -> (gusts / METER_TO_KNOT).toInt()
         WindUnit.MPS -> gusts
         WindUnit.KPH -> (gusts / KPH_TO_KNOT).toInt()

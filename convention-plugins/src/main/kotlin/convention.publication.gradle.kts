@@ -79,7 +79,7 @@ publishing {
                 }
             }
             scm {
-                url.set("https://github.com/alexmaryin/metarKt.git")
+                url.set("https://github.com/alexmaryin/metarKt")
             }
         }
     }
