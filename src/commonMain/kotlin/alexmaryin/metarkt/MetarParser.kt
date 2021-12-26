@@ -22,6 +22,13 @@ fun interface MetarParser {
      */
     fun parse(rawMetar: String): Metar
 
+    /**
+     * MetarParser includes the implementation to parse raw METAR string to data class
+     * with structured weather information. To get actual implementation invoke as follows:
+     * @constructor MetarParser.current()
+     *
+     * @author Alex Maryin, 2021
+     */
     companion object {
         fun current() = MetarParserKt()
     }

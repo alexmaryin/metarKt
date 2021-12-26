@@ -100,28 +100,30 @@ class MetarParserKt : MetarParser {
         return if (byDirs.isNotEmpty() || byRunways.isNotEmpty()) Visibility(byDirections = byDirs, byRunways = byRunways) else null
     }
 
-    private fun parsePhenomenons(): Phenomenons? {
+    private fun parsePhenomenons(): List<WeatherPhenomenon> {
 
-        val items = mutableSetOf<WeatherPhenomenons>()
-        var intensity = PhenomenonIntensity.NONE
+        val items = mutableListOf<WeatherPhenomenon>()
 
         parts.forEach { part ->
             MetarGroups.PHENOMENONS.find(part)?.let { match ->
-                if (match.groupValues[1].isNotBlank()) {
-                    intensity = when(match.groupValues[1]) {
+                val intensity = if (match.groupValues[1].isNotBlank()) {
+                    when (match.groupValues[1]) {
                         "+" -> PhenomenonIntensity.HIGH
                         "-" -> PhenomenonIntensity.LIGHT
                         else -> PhenomenonIntensity.NONE
                     }
-                }
-                if(match.groupValues[2].isNotBlank()) {
+                } else PhenomenonIntensity.NONE
+
+                val group = mutableSetOf<Phenomenons>()
+                if (match.groupValues[2].isNotBlank()) {
                     match.groupValues[2].windowed(2, 2) { code ->
-                        items += WeatherPhenomenons.values().first { it.code == code }
+                        group += Phenomenons.values().first { it.code == code }
                     }
                 }
+                items += WeatherPhenomenon(group, intensity)
             }
         }
-        return if(items.isNotEmpty()) Phenomenons(items, intensity) else null
+        return items
     }
 
     private fun parseClouds(): List<CloudLayer> {
@@ -131,7 +133,7 @@ class MetarParserKt : MetarParser {
         parts.forEach { part ->
             MetarGroups.CLOUDS.find(part)?.let { match ->
                 val type = CloudsType.values().first { it.code == match.groupValues[1] }
-                val cumulus = when(match.groupValues[3]) {
+                val cumulus = when (match.groupValues[3]) {
                     "CB" -> CumulusType.CUMULONIMBUS
                     "TCU" -> CumulusType.TOWERING_CUMULUS
                     else -> null
@@ -161,13 +163,13 @@ class MetarParserKt : MetarParser {
     private fun parsePressure(): PressureQNH? {
         parts.forEach { part ->
             MetarGroups.PRESSURE.find(part)?.let { match ->
-                if(match.groupValues[1].isNotBlank()) {
+                if (match.groupValues[1].isNotBlank()) {
                     return PressureQNH(
                         inHg = match.groupValues[1].substringAfter('A').toInt() / 100f,
                         hPa = round(match.groupValues[1].substringAfter('A').toInt() * ONE_INCH_HG / 100).toInt()
                     )
                 }
-                if(match.groupValues[2].isNotBlank()) {
+                if (match.groupValues[2].isNotBlank()) {
                     return PressureQNH(
                         hPa = match.groupValues[2].substringAfter('Q').toInt(),
                         inHg = (match.groupValues[2].substringAfter('Q').toInt() / ONE_INCH_HG).formatToFloat(2)

@@ -1,6 +1,7 @@
 # metarKt
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.alexmaryin.metarkt/parser?style=plastic)](https://repo1.maven.org/maven2/io/github/alexmaryin/metarkt/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=plastic)](https://opensource.org/licenses/MIT)
 
 _Kotlin multiplatform library for parsing METAR raw data into pure Kotlin data classes._
 
@@ -28,18 +29,18 @@ This is an example for Ulyanovsk Central Airport METAR:
 <dependency>
   <groupId>io.github.alexmaryin.metarkt</groupId>
   <artifactId>parser</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
 ### Gradle
 ```groovy
-implementation 'io.github.alexmaryin.metarkt:parser:1.0.0'
+implementation 'io.github.alexmaryin.metarkt:parser:1.0.1'
 ```
 
 ### Kotlin-DSL
 ```kotlin
-implementation("io.github.alexmaryin.metarkt:parser:1.0.0")
+implementation("io.github.alexmaryin.metarkt:parser:1.0.1")
 ```
 
 ## Using parser
@@ -92,10 +93,11 @@ defined by individual direction or runway
 
 ### Phenomenons object
 
-- `all` set of `WeatherPhenomenons` enum items (DRIZZLE, RAIN, SNOW, SNOW_GRAINS, ICE_PELLETS, SMALL_HAIL,
-  HAIL, SHOWER, FREEZE, THUNDERSTORM, DUST_STORM, SANDSTORM, FOG, IN_VICINITY, SHALLOW, PARTIAL, PATCHES, 
-  MIST, HAZE, SMOKE, DUST, BLOWING, SQUALL, ICE_CRYSTALS, VOLCANIC_ASH, DRIFTING, SAND)
-- `intensity` flag of the intensity from enum `PhenomenonIntensity` (NONE, HIGH, LIGHT)
+- `phenomemons` is the list of `WeatherPhenomenon` objects which contains:
+  - `group` set of `Phenomenons` enum items (DRIZZLE, RAIN, SNOW, SNOW_GRAINS, ICE_PELLETS, SMALL_HAIL,
+    HAIL, SHOWER, FREEZE, THUNDERSTORM, DUST_STORM, SANDSTORM, FOG, IN_VICINITY, SHALLOW, PARTIAL, PATCHES, 
+    MIST, HAZE, SMOKE, DUST, BLOWING, SQUALL, ICE_CRYSTALS, VOLCANIC_ASH, DRIFTING, SAND)
+  - `intensity` flag of the intensity from enum `PhenomenonIntensity` (NONE, HIGH, LIGHT) for this group
 
 ### Clouds
 

@@ -7,11 +7,11 @@ data class Metar(
     val reportTime: LocalDateTime?,
     val wind: Wind?,
     val visibility: Visibility?,
-    val phenomenons: Phenomenons?,
+    val phenomenons: List<WeatherPhenomenon>,
     val clouds: List<CloudLayer>,
     val temperature: Temperature?,
     val pressureQNH: PressureQNH?,
     val raw: String
 ) {
-    val ceilingAndVisibilityOK get() = clouds.isEmpty() && visibility?.distAll == 9999 && phenomenons != null
+    val ceilingAndVisibilityOK get() = clouds.isEmpty() && visibility?.distAll == 9999 && phenomenons.isEmpty()
 }

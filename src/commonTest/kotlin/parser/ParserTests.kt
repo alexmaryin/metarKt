@@ -98,14 +98,16 @@ internal class ParserTests {
 
     @Test
     fun parser_should_find_correct_phenomenon_information() {
-        val phenomenons = metarExamples.mapNotNull { raw ->
+        val phenomenons = metarExamples.map { raw ->
             parser.parse(raw).phenomenons
-        }
+        }.filterNot { it.isEmpty() }
         assertTrue {
             phenomenons == listOf(
-                Phenomenons(all = setOf(WeatherPhenomenons.SHOWER, WeatherPhenomenons.SNOW, WeatherPhenomenons.DRIFTING),
-                    intensity = PhenomenonIntensity.LIGHT),
-                Phenomenons(all = setOf(WeatherPhenomenons.FOG))
+                listOf(
+                    WeatherPhenomenon(group = setOf(Phenomenons.SHOWER, Phenomenons.SNOW), intensity = PhenomenonIntensity.LIGHT),
+                    WeatherPhenomenon(group = setOf(Phenomenons.DRIFTING, Phenomenons.SNOW))
+                ),
+                listOf(WeatherPhenomenon(group = setOf(Phenomenons.FOG)))
             )
         }
     }
@@ -114,9 +116,9 @@ internal class ParserTests {
     fun parser_should_find_correct_cloud_layers_information() {
         val clouds = metarExamples.map { raw ->
             parser.parse(raw).clouds
-        }
+        }.filterNot { it.isEmpty() }
         assertTrue {
-            clouds.filterNot { it.isEmpty() } == listOf(
+            clouds == listOf(
                 listOf(
                     CloudLayer(CloudsType.BROKEN, 30)
                 ),
@@ -162,13 +164,13 @@ internal class ParserTests {
         }
         assertTrue {
             pressure == listOf(
-                PressureQNH(hPa=1012, inHg=29.88f),
-                PressureQNH(hPa=1017, inHg=30.03f),
-                PressureQNH(hPa=1018, inHg=30.06f),
-                PressureQNH(hPa=998, inHg=29.47f),
-                PressureQNH(hPa=1012, inHg=29.88f),
-                PressureQNH(hPa=1008, inHg=29.76f),
-                PressureQNH(hPa=1038, inHg=30.65f)
+                PressureQNH(hPa = 1012, inHg = 29.88f),
+                PressureQNH(hPa = 1017, inHg = 30.03f),
+                PressureQNH(hPa = 1018, inHg = 30.06f),
+                PressureQNH(hPa = 998, inHg = 29.47f),
+                PressureQNH(hPa = 1012, inHg = 29.88f),
+                PressureQNH(hPa = 1008, inHg = 29.76f),
+                PressureQNH(hPa = 1038, inHg = 30.65f)
             )
         }
     }

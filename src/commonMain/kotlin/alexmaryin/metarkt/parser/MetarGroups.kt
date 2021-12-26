@@ -1,4 +1,4 @@
-package alexmaryin.metarkt.models
+package alexmaryin.metarkt.parser
 
 object MetarGroups {
     val STATION = "^[A-Z]{4}".toRegex()

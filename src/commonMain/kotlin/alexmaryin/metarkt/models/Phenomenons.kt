@@ -2,7 +2,7 @@ package alexmaryin.metarkt.models
 
 enum class PhenomenonIntensity { NONE, HIGH, LIGHT }
 
-enum class WeatherPhenomenons(val code: String) {
+enum class Phenomenons(val code: String) {
     DRIZZLE("DZ"), RAIN("RA"), SNOW("SN"), SNOW_GRAINS("SG"), ICE_PELLETS("PL"), SMALL_HAIL("GS"),
     HAIL("GR"), SHOWER("SH"), FREEZE("FZ"), THUNDERSTORM("TS"), DUST_STORM("DS"), SANDSTORM("SS"),
     FOG("FG"), IN_VICINITY("VC"), SHALLOW("MI"), PARTIAL("PR"), PATCHES("BC"), MIST("BR"),
@@ -10,7 +10,7 @@ enum class WeatherPhenomenons(val code: String) {
     VOLCANIC_ASH("VA"), DRIFTING("DR"), SAND("SA")
 }
 
-data class Phenomenons(
-    val all: Set<WeatherPhenomenons> = emptySet(),
+data class WeatherPhenomenon(
+    val group: Set<Phenomenons>,
     val intensity: PhenomenonIntensity = PhenomenonIntensity.NONE
 )
