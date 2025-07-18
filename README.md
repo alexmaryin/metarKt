@@ -1,6 +1,6 @@
 # metarKt
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.alexmaryin.metarkt/metarKt?style=plastic)](https://repo1.maven.org/maven2/io/github/alexmaryin/metarkt/)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.alexmaryin.metarkt/metarkt?style=plastic)](https://repo1.maven.org/maven2/io/github/alexmaryin/metarkt/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=plastic)](https://opensource.org/licenses/MIT)
 
 _Kotlin multiplatform library for parsing METAR raw data into pure Kotlin data classes._
@@ -28,19 +28,19 @@ This is an example for Ulyanovsk Central Airport METAR:
 ```xml
 <dependency>
   <groupId>io.github.alexmaryin.metarkt</groupId>
-  <artifactId>metarKt</artifactId>
+  <artifactId>metarkt</artifactId>
   <version>1.0.2</version>
 </dependency>
 ```
 
 ### Gradle
 ```groovy
-implementation 'io.github.alexmaryin.metarkt:metarKt:1.0.2'
+implementation 'io.github.alexmaryin.metarkt:metarkt:1.0.2'
 ```
 
 ### Kotlin-DSL
 ```kotlin
-implementation("io.github.alexmaryin.metarkt:metarKt:1.0.2")
+implementation("io.github.alexmaryin.metarkt:metarkt:1.0.2")
 ```
 
 ## Using parser
