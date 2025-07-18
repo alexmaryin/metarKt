@@ -1,5 +1,9 @@
 # metarKt
 
+Up to Kotlin 2.1.20 use
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.alexmaryin.metarkt/parser?style=plastic)](https://repo1.maven.org/maven2/io/github/alexmaryin/metarkt/)
+
+Since Kotlin 2.2.0 use 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.alexmaryin.metarkt/metarkt?style=plastic)](https://repo1.maven.org/maven2/io/github/alexmaryin/metarkt/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=plastic)](https://opensource.org/licenses/MIT)
 
@@ -22,25 +26,46 @@ This is an example for Ulyanovsk Central Airport METAR:
 
 `UWLL 251200Z 16008MPS 8000 -SN BLSN OVC013 M09/M13 Q1008 R20/820242 NOSIG RMK QFE746/0994`
 
-## Install dependency
+## Install dependency for Kotlin up to 2.1.20
+
+### Maven
+```xml
+<dependency>
+  <groupId>io.github.alexmaryin.metarkt</groupId>
+  <artifactId>parser</artifactId>
+  <version>1.0.1</version>
+</dependency>
+```
+
+### Gradle
+```groovy
+implementation 'io.github.alexmaryin.metarkt:parser:1.0.1'
+```
+
+### Kotlin-DSL
+```kotlin
+implementation("io.github.alexmaryin.metarkt:parser:1.0.1")
+```
+
+## Install dependency for since Kotlin 2.2.0+
 
 ### Maven
 ```xml
 <dependency>
   <groupId>io.github.alexmaryin.metarkt</groupId>
   <artifactId>metarkt</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 </dependency>
 ```
 
 ### Gradle
 ```groovy
-implementation 'io.github.alexmaryin.metarkt:metarkt:1.0.2'
+implementation 'io.github.alexmaryin.metarkt:parser:1.0.3'
 ```
 
 ### Kotlin-DSL
 ```kotlin
-implementation("io.github.alexmaryin.metarkt:metarkt:1.0.2")
+implementation("io.github.alexmaryin.parser:metarkt:1.0.3")
 ```
 
 ## Using parser
