@@ -60,7 +60,7 @@ implementation("io.github.alexmaryin.metarkt:parser:1.0.1")
 
 ### Gradle
 ```groovy
-implementation 'io.github.alexmaryin.metarkt:parser:1.0.3'
+implementation 'io.github.alexmaryin.metarkt:metarkt:1.0.3'
 ```
 
 ### Kotlin-DSL
