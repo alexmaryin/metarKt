@@ -2,12 +2,13 @@ package alexmaryin.metarkt.parser
 
 import alexmaryin.metarkt.MetarParser
 import alexmaryin.metarkt.models.*
-import kotlinx.datetime.Clock
-import kotlin.math.pow
-import kotlin.math.round
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.math.pow
+import kotlin.math.round
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 fun Double.formatToFloat(decimals: Int): Float {
     val multiplier = 10f.pow(decimals)
@@ -26,6 +27,7 @@ class MetarParserKt : MetarParser {
         return null
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun parseReportTime(): LocalDateTime? {
         parts.forEach { part ->
             MetarGroups.REPORT_TIME.find(part)?.let {
@@ -117,7 +119,7 @@ class MetarParserKt : MetarParser {
                 val group = mutableSetOf<Phenomenons>()
                 if (match.groupValues[2].isNotBlank()) {
                     match.groupValues[2].windowed(2, 2) { code ->
-                        group += Phenomenons.values().first { it.code == code }
+                        group += Phenomenons.entries.first { it.code == code }
                     }
                 }
                 items += WeatherPhenomenon(group, intensity)
@@ -132,7 +134,7 @@ class MetarParserKt : MetarParser {
 
         parts.forEach { part ->
             MetarGroups.CLOUDS.find(part)?.let { match ->
-                val type = CloudsType.values().first { it.code == match.groupValues[1] }
+                val type = CloudsType.entries.first { it.code == match.groupValues[1] }
                 val cumulus = when (match.groupValues[3]) {
                     "CB" -> CumulusType.CUMULONIMBUS
                     "TCU" -> CumulusType.TOWERING_CUMULUS

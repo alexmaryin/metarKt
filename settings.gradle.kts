@@ -1,2 +1,14 @@
-includeBuild("convention-plugins")
-rootProject.name = "parser"
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}

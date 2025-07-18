@@ -1,50 +1,32 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
-    kotlin("multiplatform") version "1.6.10"
-//    id("maven-publish")
-    id("convention.publication")
+    kotlin("multiplatform") version "2.2.0"
+    id("com.vanniktech.maven.publish") version "0.34.0"
+    id("com.android.library") version "8.10.0"
 }
 
 group = "io.github.alexmaryin.metarkt"
-version = "1.0.1"
-
-repositories {
-    mavenCentral()
-}
+version = "1.0.2"
 
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
-        }
-        withJava()
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
+    jvm()
+    androidTarget {
+        publishLibraryVariants("release")
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    js(BOTH) {
-        browser {
-            commonWebpackConfig {
-                cssSupport.enabled = true
-            }
-        }
-    }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    linuxX64()
 
-
-    val hostOs = System.getProperty("os.name")
-    val isMingwX64 = hostOs.startsWith("Windows")
-    val nativeTarget = when {
-        hostOs == "Mac OS X" -> macosX64("native")
-        hostOs == "Linux" -> linuxX64("native")
-        isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-    }
-
-    
     sourceSets {
         val commonMain by getting {
             dependencies {
                 // Date-time
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
             }
         }
         val commonTest by getting {
@@ -52,11 +34,45 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jvmMain by getting
-        val jvmTest by getting
-        val jsMain by getting
-        val jsTest by getting
-        val nativeMain by getting
-        val nativeTest by getting
+    }
+}
+
+android {
+    namespace = "io.github.alexmaryin.metarkt"
+    compileSdk = 35
+    defaultConfig {
+        minSdk = 24
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+}
+
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
+    coordinates(group.toString(), "metarkt", version.toString())
+    pom {
+        name = "MetarKt library"
+        description = "Provides parsing of raw METAR string to pure Kotlin data classes"
+        inceptionYear = "2021"
+        url = "https://github.com/alexmaryin/metarKt"
+        licenses {
+            license {
+                name = "MIT"
+                url = "https://opensource.org/licenses/MIT"
+            }
+        }
+        developers {
+            developer {
+                id = "alexmaryin"
+                name = "Alex Maryin"
+                email = "java.ul@gmail.com"
+            }
+        }
+        scm {
+            url = "https://github.com/alexmaryin/metarKt"
+        }
     }
 }

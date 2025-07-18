@@ -2,10 +2,20 @@ package parser
 
 import alexmaryin.metarkt.models.*
 import alexmaryin.metarkt.MetarParser
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.DateTimeFormat
+import kotlinx.datetime.format.Padding
+import kotlinx.datetime.format.char
+import kotlinx.datetime.number
+import kotlinx.datetime.toLocalDateTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 internal class ParserTests {
 
@@ -34,20 +44,24 @@ internal class ParserTests {
         assertTrue { stations == listOf("UWLL", "KLAX", "LOWI", "ULLI", "UWWW", "EGLL", "UEEE") }
     }
 
+    @OptIn(ExperimentalTime::class)
     @Test
     fun parser_should_find_correct_time_of_report() {
         val reports = metarExamples.mapNotNull { raw ->
             parser.parse(raw).reportTime
         }
+        println(reports)
+        val prefix = LocalDate.Format { year(); char('-');monthNumber(Padding.ZERO) }
+        val dt = prefix.format(Clock.System.now().toLocalDateTime(TimeZone.UTC).date)
         assertTrue {
             reports == listOf(
-                LocalDateTime.parse("2021-12-23T11:00:00"),
-                LocalDateTime.parse("2021-12-23T10:53:00"),
-                LocalDateTime.parse("2021-12-23T11:20:00"),
-                LocalDateTime.parse("2021-12-23T11:00:00"),
-                LocalDateTime.parse("2021-12-23T11:00:00"),
-                LocalDateTime.parse("2021-12-23T11:20:00"),
-                LocalDateTime.parse("2021-12-16T15:00:00"),
+                LocalDateTime.parse("$dt-23T11:00:00"),
+                LocalDateTime.parse("$dt-23T10:53:00"),
+                LocalDateTime.parse("$dt-23T11:20:00"),
+                LocalDateTime.parse("$dt-23T11:00:00"),
+                LocalDateTime.parse("$dt-23T11:00:00"),
+                LocalDateTime.parse("$dt-23T11:20:00"),
+                LocalDateTime.parse("$dt-16T15:00:00"),
             )
         }
     }
