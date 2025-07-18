@@ -1,6 +1,6 @@
 # metarKt
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.alexmaryin.metarkt/parser?style=plastic)](https://repo1.maven.org/maven2/io/github/alexmaryin/metarkt/)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.alexmaryin.metarkt/metarKt?style=plastic)](https://repo1.maven.org/maven2/io/github/alexmaryin/metarkt/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=plastic)](https://opensource.org/licenses/MIT)
 
 _Kotlin multiplatform library for parsing METAR raw data into pure Kotlin data classes._
@@ -28,25 +28,25 @@ This is an example for Ulyanovsk Central Airport METAR:
 ```xml
 <dependency>
   <groupId>io.github.alexmaryin.metarkt</groupId>
-  <artifactId>parser</artifactId>
-  <version>1.0.1</version>
+  <artifactId>metarKt</artifactId>
+  <version>1.0.2</version>
 </dependency>
 ```
 
 ### Gradle
 ```groovy
-implementation 'io.github.alexmaryin.metarkt:parser:1.0.1'
+implementation 'io.github.alexmaryin.metarkt:metarKt:1.0.2'
 ```
 
 ### Kotlin-DSL
 ```kotlin
-implementation("io.github.alexmaryin.metarkt:parser:1.0.1")
+implementation("io.github.alexmaryin.metarkt:metarKt:1.0.2")
 ```
 
 ## Using parser
 
 The main interface implemented in library is `MetarParser`. It's including companion object with
-constructor of standard implementation: `MetarParses.current()`.
+constructor of standard implementation: `MetarParser.current()`.
 
 Returning data type of `Metar` is composed of following values:
 ```
@@ -118,7 +118,7 @@ defined by individual direction or runway
 
 ### License
 
-Copyright 2021 ALex Maryin
+Copyright 2021-2025 ALex Maryin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
