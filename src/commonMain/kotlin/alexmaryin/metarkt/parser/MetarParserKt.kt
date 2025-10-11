@@ -10,12 +10,12 @@ import kotlin.math.round
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-fun Double.formatToFloat(decimals: Int): Float {
+internal fun Double.formatToFloat(decimals: Int): Float {
     val multiplier = 10f.pow(decimals)
     return (this * multiplier).toInt() / multiplier
 }
 
-class MetarParserKt : MetarParser {
+public class MetarParserKt : MetarParser {
     private val parts = mutableListOf<String>()
 
     private fun parseStation(): String? {
@@ -43,13 +43,24 @@ class MetarParserKt : MetarParser {
     private fun parseWind(): Wind? {
         parts.forEach { part ->
             MetarGroups.WIND.find(part)?.let {
+                // Handle calm wind case
+                if (it.groupValues[0] == "00000KT") {
+                    return Wind(
+                        direction = 0,
+                        variable = false,
+                        speed = 0,
+                        speedUnits = WindUnit.KT,
+                        gusts = 0
+                    )
+                }
+
                 return Wind(
                     direction = it.groupValues[1].toIntOrNull() ?: 0,
                     variable = it.groupValues[1] == "VRB",
                     speed = it.groupValues[2].toIntOrNull() ?: 0,
                     speedUnits = when (it.groupValues[4]) {
                         "MPS" -> WindUnit.MPS
-                        "KPH" -> WindUnit.KPH
+                        "KMH" -> WindUnit.KPH  // Fixed: was "KPH" but regex uses "KMH"
                         else -> WindUnit.KT
                     },
                     gusts = it.groupValues[3].toIntOrNull() ?: 0

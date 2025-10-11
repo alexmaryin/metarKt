@@ -5,14 +5,12 @@ import alexmaryin.metarkt.MetarParser
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format
-import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.format.Padding
 import kotlinx.datetime.format.char
-import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -80,6 +78,51 @@ internal class ParserTests {
                 Wind(variable = true, speed = 1, speedUnits = WindUnit.MPS),
                 Wind(direction = 200, speed = 9, speedUnits = WindUnit.KT),
                 Wind(direction = 0, speed = 0, speedUnits = WindUnit.MPS),
+            )
+        }
+    }
+
+    @Test
+    fun parser_should_handle_all_wind_variations() {
+        val testCases = listOf(
+            "METAR KORD 231451Z 27008KT 10SM CLR 12/M03 A3024" to Wind(direction = 270, speed = 8, speedUnits = WindUnit.KT),
+            "METAR KORD 231451Z 27008G15KT 10SM CLR 12/M03 A3024" to Wind(direction = 270, speed = 8, speedUnits = WindUnit.KT, gusts = 15),
+            "METAR KORD 231451Z 00000KT 10SM CLR 12/M03 A3024" to Wind(direction = 0, speed = 0, speedUnits = WindUnit.KT),
+            "METAR KORD 231451Z VRB05KT 10SM CLR 12/M03 A3024" to Wind(variable = true, speed = 5, speedUnits = WindUnit.KT),
+            "METAR KORD 231451Z 20010MPS 10SM CLR 12/M03 A3024" to Wind(direction = 200, speed = 10, speedUnits = WindUnit.MPS),
+            "METAR KORD 231451Z 20010G20MPS 10SM CLR 12/M03 A3024" to Wind(direction = 200, speed = 10, speedUnits = WindUnit.MPS, gusts = 20),
+            "METAR RJTT 231451Z 20020KMH 10SM CLR 12/M03 A3024" to Wind(direction = 200, speed = 20, speedUnits = WindUnit.KPH),
+            "METAR RJTT 231451Z 20020G35KMH 10SM CLR 12/M03 A3024" to Wind(direction = 200, speed = 20, speedUnits = WindUnit.KPH, gusts = 35)
+        )
+
+        testCases.forEach { (metar, expectedWind) ->
+            val result = parser.parse(metar)
+            val wind = result.wind
+            assertTrue(wind != null, "No wind found in: $metar")
+            assertEquals(
+                wind.direction,
+                expectedWind.direction,
+                "Wrong direction in $metar: expected ${expectedWind.direction}, got ${wind.direction}"
+            )
+            assertEquals(
+                wind.variable,
+                expectedWind.variable,
+                "Wrong variable flag in $metar: expected ${expectedWind.variable}, got ${wind.variable}"
+            )
+            assertEquals(
+                wind.speed,
+                expectedWind.speed,
+                "Wrong speed in $metar: expected ${expectedWind.speed}, got ${wind.speed}"
+            )
+            assertEquals(
+                wind.speedUnits,
+                expectedWind.speedUnits,
+                "Wrong units in $metar: expected ${expectedWind.speedUnits}, got ${wind.speedUnits}"
+            )
+            assertEquals(
+                wind.gusts,
+                expectedWind.gusts,
+                "Wrong gusts in $metar: expected ${expectedWind.gusts}, got ${wind.gusts}"
             )
         }
     }

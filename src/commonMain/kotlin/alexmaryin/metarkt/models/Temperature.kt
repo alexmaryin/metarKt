@@ -1,6 +1,6 @@
 package alexmaryin.metarkt.models
 
-data class Temperature(
+public data class Temperature(
     val air: Int,
     val dewPoint: Int
 )

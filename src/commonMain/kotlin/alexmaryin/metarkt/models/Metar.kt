@@ -2,7 +2,7 @@ package alexmaryin.metarkt.models
 
 import kotlinx.datetime.LocalDateTime
 
-data class Metar(
+public data class Metar(
     val station: String?,
     val reportTime: LocalDateTime?,
     val wind: Wind?,
@@ -13,5 +13,5 @@ data class Metar(
     val pressureQNH: PressureQNH?,
     val raw: String
 ) {
-    val ceilingAndVisibilityOK get() = clouds.isEmpty() && visibility?.distAll == 9999 && phenomenons.isEmpty()
+    val ceilingAndVisibilityOK: Boolean get() = clouds.isEmpty() && visibility?.distAll == 9999 && phenomenons.isEmpty()
 }

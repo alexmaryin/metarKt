@@ -11,7 +11,7 @@ import alexmaryin.metarkt.parser.MetarParserKt
  * @author Alex Maryin, 2021
  */
 
-fun interface MetarParser {
+public fun interface MetarParser {
     /**
      * Returns parsed data class with METAR information.
      * @param rawMetar [String] - string with METAR information, i.e.:
@@ -20,7 +20,7 @@ fun interface MetarParser {
      *
      * @return [Metar] - data class with structured weather information.
      */
-    fun parse(rawMetar: String): Metar
+    public fun parse(rawMetar: String): Metar
 
     /**
      * MetarParser includes the implementation to parse raw METAR string to data class
@@ -29,7 +29,7 @@ fun interface MetarParser {
      *
      * @author Alex Maryin, 2021
      */
-    companion object {
-        fun current() = MetarParserKt()
+    public companion object {
+        public fun current(): MetarParserKt = MetarParserKt()
     }
 }
