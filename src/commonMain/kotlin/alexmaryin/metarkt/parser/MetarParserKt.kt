@@ -213,7 +213,7 @@ public class MetarParserKt : MetarParser {
                 val hpa = match.groupValues.getOrNull(2)?.takeIf { it.isNotEmpty() }
                 return PressureQFE(
                     mmHg = mm.toInt(),
-                    hPa = hpa?.toInt() ?: (mm.toInt() * ONE_MM_HG).roundToInt()
+                    milliBar = hpa?.toInt() ?: (mm.toInt() * ONE_MM_HG).roundToInt()
                 )
             }
         }

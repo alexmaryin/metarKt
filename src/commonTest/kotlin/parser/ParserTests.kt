@@ -277,9 +277,9 @@ internal class ParserTests {
         }
         assertTrue {
             pressures == listOf(
-                PressureQFE(mmHg = 749, hPa = 999),
-                PressureQFE(mmHg = 748, hPa = 998),
-                PressureQFE(mmHg = 770, hPa = 1027)
+                PressureQFE(mmHg = 749, milliBar = 999),
+                PressureQFE(mmHg = 748, milliBar = 998),
+                PressureQFE(mmHg = 770, milliBar = 1027)
             )
         }
     }
