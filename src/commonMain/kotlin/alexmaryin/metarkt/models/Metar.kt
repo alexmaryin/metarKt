@@ -11,6 +11,7 @@ public data class Metar(
     val clouds: List<CloudLayer>,
     val temperature: Temperature?,
     val pressureQNH: PressureQNH?,
+    val pressureQFE: PressureQFE?,
     val raw: String
 ) {
     val ceilingAndVisibilityOK: Boolean get() = clouds.isEmpty() && visibility?.distAll == 9999 && phenomenons.isEmpty()

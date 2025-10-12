@@ -9,4 +9,6 @@ internal object MetarGroups {
     val CLOUDS = "^(NSC|FEW|SCT|SKC|CLR|BKN|OVC)([0-9]{3})(CB|TCU)?$".toRegex()
     val TEMPERATURE_DEW = "^(M?[0-9]{2})/(M?[0-9]{2})?\$".toRegex()
     val PRESSURE = "^A([0-9]{4})|^Q([0-9]{4})".toRegex()
+    val QFE = """\bQFE(\d{3})(?:/(\d{4}))?\b""".toRegex()
+
 }

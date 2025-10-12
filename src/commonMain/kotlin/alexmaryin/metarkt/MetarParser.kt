@@ -8,7 +8,7 @@ import alexmaryin.metarkt.parser.MetarParserKt
  * with structured weather information. To get actual implementation invoke as follows:
  * @constructor MetarParser.current()
  *
- * @author Alex Maryin, 2021
+ * @author Alex Maryin, 2021-2025
  */
 
 public fun interface MetarParser {
@@ -27,7 +27,7 @@ public fun interface MetarParser {
      * with structured weather information. To get actual implementation invoke as follows:
      * @constructor MetarParser.current()
      *
-     * @author Alex Maryin, 2021
+     * @author Alex Maryin, 2021-2025
      */
     public companion object {
         public fun current(): MetarParserKt = MetarParserKt()

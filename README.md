@@ -54,18 +54,18 @@ implementation("io.github.alexmaryin.metarkt:parser:1.0.1")
 <dependency>
   <groupId>io.github.alexmaryin.metarkt</groupId>
   <artifactId>metarkt</artifactId>
-  <version>1.0.3</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
 ### Gradle
 ```groovy
-implementation 'io.github.alexmaryin.metarkt:metarkt:1.0.3'
+implementation 'io.github.alexmaryin.metarkt:metarkt:1.1.0'
 ```
 
 ### Kotlin-DSL
 ```kotlin
-implementation("io.github.alexmaryin.parser:metarkt:1.0.3")
+implementation("io.github.alexmaryin.parser:metarkt:1.1.0")
 ```
 
 ## Using parser
@@ -83,6 +83,7 @@ Returning data type of `Metar` is composed of following values:
     val clouds: List<CloudLayer>,
     val temperature: Temperature?,
     val pressureQNH: PressureQNH?,
+    val pressureQFE: PressureQFE?,
     val ceilingAndVisibilityOK: Boolean,
     val raw: String
 ```
@@ -140,6 +141,29 @@ defined by individual direction or runway
 
 - `hPa` sea level pressure in Hectopascals
 - `inHg` sea level pressure in the Inch of mercury
+
+### PressureQFE object
+
+- `mmHg` ground level pressure in millimeters of mercury
+- '`hPa` ground level pressure in Hectopascals
+
+## Useful helpers extensions
+
+### Calculating wind components for given runway's true course
+
+```kotlin
+    val wind = Wind(direction = 225, speed = 10, speedUnits = WindUnit.KT)
+    val runway = 180    // true course not magnetic!
+    val component = wind.componentForRunwayTrue(runway)
+```
+Extension `componentForRunwayTrue` returns `WindComponent` object which contains:
+```kotlin
+data class WindComponent(
+    val headwind: Double,   // positive = headwind, negative = tailwind
+    val crosswind: Double,  // always positive magnitude
+    val fromLeft: Boolean   // true if crosswind comes from the left
+)
+```
 
 ### License
 

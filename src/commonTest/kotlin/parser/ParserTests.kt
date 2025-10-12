@@ -49,7 +49,7 @@ internal class ParserTests {
             parser.parse(raw).reportTime
         }
         println(reports)
-        val prefix = LocalDate.Format { year(); char('-');monthNumber(Padding.ZERO) }
+        val prefix = LocalDate.Format { year(); char('-'); monthNumber(Padding.ZERO) }
         val dt = prefix.format(Clock.System.now().toLocalDateTime(TimeZone.UTC).date)
         assertTrue {
             reports == listOf(
@@ -85,14 +85,49 @@ internal class ParserTests {
     @Test
     fun parser_should_handle_all_wind_variations() {
         val testCases = listOf(
-            "METAR KORD 231451Z 27008KT 10SM CLR 12/M03 A3024" to Wind(direction = 270, speed = 8, speedUnits = WindUnit.KT),
-            "METAR KORD 231451Z 27008G15KT 10SM CLR 12/M03 A3024" to Wind(direction = 270, speed = 8, speedUnits = WindUnit.KT, gusts = 15),
-            "METAR KORD 231451Z 00000KT 10SM CLR 12/M03 A3024" to Wind(direction = 0, speed = 0, speedUnits = WindUnit.KT),
-            "METAR KORD 231451Z VRB05KT 10SM CLR 12/M03 A3024" to Wind(variable = true, speed = 5, speedUnits = WindUnit.KT),
-            "METAR KORD 231451Z 20010MPS 10SM CLR 12/M03 A3024" to Wind(direction = 200, speed = 10, speedUnits = WindUnit.MPS),
-            "METAR KORD 231451Z 20010G20MPS 10SM CLR 12/M03 A3024" to Wind(direction = 200, speed = 10, speedUnits = WindUnit.MPS, gusts = 20),
-            "METAR RJTT 231451Z 20020KMH 10SM CLR 12/M03 A3024" to Wind(direction = 200, speed = 20, speedUnits = WindUnit.KPH),
-            "METAR RJTT 231451Z 20020G35KMH 10SM CLR 12/M03 A3024" to Wind(direction = 200, speed = 20, speedUnits = WindUnit.KPH, gusts = 35)
+            "METAR KORD 231451Z 27008KT 10SM CLR 12/M03 A3024" to Wind(
+                direction = 270,
+                speed = 8,
+                speedUnits = WindUnit.KT
+            ),
+            "METAR KORD 231451Z 27008G15KT 10SM CLR 12/M03 A3024" to Wind(
+                direction = 270,
+                speed = 8,
+                speedUnits = WindUnit.KT,
+                gusts = 15
+            ),
+            "METAR KORD 231451Z 00000KT 10SM CLR 12/M03 A3024" to Wind(
+                direction = 0,
+                speed = 0,
+                speedUnits = WindUnit.KT
+            ),
+            "METAR KORD 231451Z VRB05KT 10SM CLR 12/M03 A3024" to Wind(
+                variable = true,
+                speed = 5,
+                speedUnits = WindUnit.KT
+            ),
+            "METAR KORD 231451Z 20010MPS 10SM CLR 12/M03 A3024" to Wind(
+                direction = 200,
+                speed = 10,
+                speedUnits = WindUnit.MPS
+            ),
+            "METAR KORD 231451Z 20010G20MPS 10SM CLR 12/M03 A3024" to Wind(
+                direction = 200,
+                speed = 10,
+                speedUnits = WindUnit.MPS,
+                gusts = 20
+            ),
+            "METAR RJTT 231451Z 20020KMH 10SM CLR 12/M03 A3024" to Wind(
+                direction = 200,
+                speed = 20,
+                speedUnits = WindUnit.KPH
+            ),
+            "METAR RJTT 231451Z 20020G35KMH 10SM CLR 12/M03 A3024" to Wind(
+                direction = 200,
+                speed = 20,
+                speedUnits = WindUnit.KPH,
+                gusts = 35
+            )
         )
 
         testCases.forEach { (metar, expectedWind) ->
@@ -161,7 +196,10 @@ internal class ParserTests {
         assertTrue {
             phenomenons == listOf(
                 listOf(
-                    WeatherPhenomenon(group = setOf(Phenomenons.SHOWER, Phenomenons.SNOW), intensity = PhenomenonIntensity.LIGHT),
+                    WeatherPhenomenon(
+                        group = setOf(Phenomenons.SHOWER, Phenomenons.SNOW),
+                        intensity = PhenomenonIntensity.LIGHT
+                    ),
                     WeatherPhenomenon(group = setOf(Phenomenons.DRIFTING, Phenomenons.SNOW))
                 ),
                 listOf(WeatherPhenomenon(group = setOf(Phenomenons.FOG)))
@@ -231,4 +269,19 @@ internal class ParserTests {
             )
         }
     }
+
+    @Test
+    fun parser_should_find_qfe_pressure() {
+        val pressures = metarExamples.mapNotNull { raw ->
+            parser.parse(raw).pressureQFE
+        }
+        assertTrue {
+            pressures == listOf(
+                PressureQFE(mmHg = 749, hPa = 999),
+                PressureQFE(mmHg = 748, hPa = 998),
+                PressureQFE(mmHg = 770, hPa = 1027)
+            )
+        }
+    }
+
 }

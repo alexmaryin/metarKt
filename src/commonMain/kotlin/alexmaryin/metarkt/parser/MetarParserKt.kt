@@ -7,6 +7,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.math.pow
 import kotlin.math.round
+import kotlin.math.roundToInt
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -33,7 +34,11 @@ public class MetarParserKt : MetarParser {
             MetarGroups.REPORT_TIME.find(part)?.let {
                 val stamp = Clock.System.now().toLocalDateTime(TimeZone.UTC)
                 return LocalDateTime(
-                    stamp.year, stamp.month, it.groupValues[1].toInt(), it.groupValues[2].toInt(), it.groupValues[3].toInt()
+                    stamp.year,
+                    stamp.month,
+                    it.groupValues[1].toInt(),
+                    it.groupValues[2].toInt(),
+                    it.groupValues[3].toInt()
                 )
             }
         }
@@ -60,7 +65,7 @@ public class MetarParserKt : MetarParser {
                     speed = it.groupValues[2].toIntOrNull() ?: 0,
                     speedUnits = when (it.groupValues[4]) {
                         "MPS" -> WindUnit.MPS
-                        "KMH" -> WindUnit.KPH  // Fixed: was "KPH" but regex uses "KMH"
+                        "KMH" -> WindUnit.KPH
                         else -> WindUnit.KT
                     },
                     gusts = it.groupValues[3].toIntOrNull() ?: 0
@@ -85,9 +90,11 @@ public class MetarParserKt : MetarParser {
                             distUnits = if (it.groupValues[4] == "SM") VisibilityUnit.SM else VisibilityUnit.METERS,
                         )
                     }
+
                     it.groupValues[2].isNotBlank() -> {
                         byDirs += VisibilityByDir(
-                            dist = it.groupValues[1].toIntOrNull() ?: throw RuntimeException("Visibility for direction ${it.groupValues[2]} undefined!"),
+                            dist = it.groupValues[1].toIntOrNull()
+                                ?: throw RuntimeException("Visibility for direction ${it.groupValues[2]} undefined!"),
                             direction = when (it.groupValues[2]) {
                                 "N" -> VisibilityDirection.NORTH
                                 "NE" -> VisibilityDirection.NORTH_EAST
@@ -101,16 +108,21 @@ public class MetarParserKt : MetarParser {
                             }
                         )
                     }
+
                     it.groupValues[6].isNotBlank() -> {
                         byRunways += VisibilityByRunway(
-                            dist = it.groupValues[7].toIntOrNull() ?: throw RuntimeException("Visibility for runway ${it.groupValues[6]} undefined!"),
+                            dist = it.groupValues[7].toIntOrNull()
+                                ?: throw RuntimeException("Visibility for runway ${it.groupValues[6]} undefined!"),
                             runway = it.groupValues[6]
                         )
                     }
                 }
             }
         }
-        return if (byDirs.isNotEmpty() || byRunways.isNotEmpty()) Visibility(byDirections = byDirs, byRunways = byRunways) else null
+        return if (byDirs.isNotEmpty() || byRunways.isNotEmpty()) Visibility(
+            byDirections = byDirs,
+            byRunways = byRunways
+        ) else null
     }
 
     private fun parsePhenomenons(): List<WeatherPhenomenon> {
@@ -153,7 +165,8 @@ public class MetarParserKt : MetarParser {
                 }
                 items += CloudLayer(
                     type = type,
-                    lowMarginFt = match.groupValues[2].toIntOrNull() ?: throw RuntimeException("No margin for cloud layer in ${match.groupValues[0]}"),
+                    lowMarginFt = match.groupValues[2].toIntOrNull()
+                        ?: throw RuntimeException("No margin for cloud layer in ${match.groupValues[0]}"),
                     cumulusType = cumulus
                 )
             }
@@ -193,6 +206,20 @@ public class MetarParserKt : MetarParser {
         return null
     }
 
+    private fun parseQFE(): PressureQFE? {
+        parts.forEach { part ->
+            MetarGroups.QFE.find(part)?.let { match ->
+                val mm = match.groupValues[1]
+                val hpa = match.groupValues.getOrNull(2)?.takeIf { it.isNotEmpty() }
+                return PressureQFE(
+                    mmHg = mm.toInt(),
+                    hPa = hpa?.toInt() ?: (mm.toInt() * ONE_MM_HG).roundToInt()
+                )
+            }
+        }
+        return null
+    }
+
     override fun parse(rawMetar: String): Metar {
 
         parts.clear()
@@ -207,6 +234,7 @@ public class MetarParserKt : MetarParser {
             clouds = parseClouds(),
             temperature = parseTemperature(),
             pressureQNH = parsePressure(),
+            pressureQFE = parseQFE(),
             raw = rawMetar
         )
     }
