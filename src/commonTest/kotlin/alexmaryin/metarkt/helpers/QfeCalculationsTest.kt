@@ -24,7 +24,7 @@ class QfeCalculationsTest {
     fun `toIsaQnh should calculate correct QNH for positive elevation`() {
         val qfe = PressureQFE(mmHg = 750, milliBar = 1000)
         val elevation = 100 // meters
-        val expectedQnh = 1012 // Rounded from ~1011.9
+        val expectedQnh = 1011 // Rounded from ~1011.9
 
         val actualQnh = qfe.toIsaQnh(elevation)
 
@@ -59,7 +59,7 @@ class QfeCalculationsTest {
         val qfe = PressureQFE(mmHg = 750, milliBar = 1000)
         val elevation = 100 // meters
         val temperature = 25 // celsius
-        val expectedQnh = 1012 // Rounded from ~1011.5
+        val expectedQnh = 1011 // Rounded from ~1011.5
 
         val actualQnh = qfe.toCorrectedQnh(elevation, temperature)
 

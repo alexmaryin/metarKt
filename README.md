@@ -7,7 +7,7 @@ Since Kotlin 2.2.0 use
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.alexmaryin.metarkt/metarkt?style=plastic)](https://repo1.maven.org/maven2/io/github/alexmaryin/metarkt/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=plastic)](https://opensource.org/licenses/MIT)
 
-_Kotlin multiplatform library for parsing METAR raw data into pure Kotlin data classes._
+## _Kotlin multiplatform library for parsing METAR raw data into pure Kotlin data classes._
 
 METARs typically come from airports or permanent weather observation stations. 
 Reports are generated once an hour or half-hour at most stations, but if conditions change significantly at a staffed location, 
@@ -54,18 +54,18 @@ implementation("io.github.alexmaryin.metarkt:parser:1.0.1")
 <dependency>
   <groupId>io.github.alexmaryin.metarkt</groupId>
   <artifactId>metarkt</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.2</version>
 </dependency>
 ```
 
 ### Gradle
 ```groovy
-implementation 'io.github.alexmaryin.metarkt:metarkt:1.1.0'
+implementation 'io.github.alexmaryin.metarkt:metarkt:1.1.2'
 ```
 
 ### Kotlin-DSL
 ```kotlin
-implementation("io.github.alexmaryin.parser:metarkt:1.1.0")
+implementation("io.github.alexmaryin.parser:metarkt:1.1.2")
 ```
 
 ## Using parser
@@ -142,10 +142,26 @@ defined by individual direction or runway
 - `hPa` sea level pressure in Hectopascals
 - `inHg` sea level pressure in the Inch of mercury
 
+Helper constructors:
+
+`PressureQNH.fromHpa(hPa: Int)` - automatically adds converted inHg
+
+`PressureQNH.fromInHg(inHg: Float)` - automatically adds converted hPa
+
+`PressureQNH.standard()` - returns QNH (1013 hPa = 29.92 inHg)
+
+
+
 ### PressureQFE object
 
 - `mmHg` ground level pressure in millimeters of mercury
 - '`hPa` ground level pressure in Hectopascals
+
+Helper constructors:
+
+`PressureQFE(mmHg: Int)` - automatically adds converted hPa
+
+`PressureQDE.standard()` - returns QNE (760 mmHg = 1013 hPa)
 
 ## Useful helpers extensions
 
@@ -164,6 +180,25 @@ data class WindComponent(
     val fromLeft: Boolean   // true if crosswind comes from the left
 )
 ```
+
+### QFE extensions
+
+Convert QFE to QNH for ISA (Standard Atmosphere) as it using for METAR or ATIS reports:
+
+```kotlin
+    val qfe = PressureQFE(mmHg = 750)
+    val elevation = 100 // meters
+    val actualQnh = qfe.toIsaQnh(elevation) // return 1011
+```
+
+Convert QFE to QNH for actual atmosphere concerning temperature:
+
+```kotlin
+    val qfe = PressureQFE(mmHg = 750)
+    val elevation = 100 // meters
+    val temperature = 25 // celsius
+    val actualQnh = qfe.toCorrectedQnh(elevation, temperature) // return 1011
+   ```
 
 ### License
 
