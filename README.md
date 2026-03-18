@@ -60,12 +60,12 @@ implementation("io.github.alexmaryin.metarkt:parser:1.0.1")
 
 ### Gradle
 ```groovy
-implementation 'io.github.alexmaryin.metarkt:metarkt:1.1.2'
+implementation 'io.github.alexmaryin.metarkt:metarkt:1.1.3'
 ```
 
 ### Kotlin-DSL
 ```kotlin
-implementation("io.github.alexmaryin.parser:metarkt:1.1.2")
+implementation("io.github.alexmaryin.parser:metarkt:1.1.3")
 ```
 
 ## Using parser
@@ -200,13 +200,26 @@ Convert QFE to QNH for actual atmosphere concerning temperature:
     val actualQnh = qfe.toCorrectedQnh(elevation, temperature) // return 1011
    ```
 
+### Cold temperature altitude correction
+
+Apply FAA/ICAO cold-temperature correction to an indicated height above airport elevation:
+
+```kotlin
+    val indicatedHeight = 1500 // feet above airport
+    val temperature = -20 // celsius
+    val correctedHeight = coldTemperatureCorrectedAltitude(indicatedHeight, temperature) // return 1710
+```
+
+The function interpolates correction values from the FAA AIM cold-temperature table and returns
+the corrected height in feet. The input height must be height above airport/reporting station elevation,
+not MSL altitude.
+
 ### License
 
-Copyright 2021-2025 ALex Maryin
+Copyright 2021-2026 ALex Maryin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
