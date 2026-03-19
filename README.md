@@ -54,18 +54,18 @@ implementation("io.github.alexmaryin.metarkt:parser:1.0.1")
 <dependency>
   <groupId>io.github.alexmaryin.metarkt</groupId>
   <artifactId>metarkt</artifactId>
-  <version>1.1.2</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 
 ### Gradle
 ```groovy
-implementation 'io.github.alexmaryin.metarkt:metarkt:1.1.3'
+implementation 'io.github.alexmaryin.metarkt:metarkt:1.2.0'
 ```
 
 ### Kotlin-DSL
 ```kotlin
-implementation("io.github.alexmaryin.parser:metarkt:1.1.3")
+implementation("io.github.alexmaryin.parser:metarkt:1.2.0")
 ```
 
 ## Using parser

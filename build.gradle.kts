@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "io.github.alexmaryin.metarkt"
-version = "1.1.3"
+version = "1.2.0"
 
 kotlin {
     explicitApi()
