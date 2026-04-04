@@ -202,6 +202,8 @@ Convert QFE to QNH for actual atmosphere concerning temperature:
 
 ### Cold temperature altitude correction
 
+#### Simple correction for a single altitude
+
 Apply FAA/ICAO cold-temperature correction to an indicated height above airport elevation:
 
 ```kotlin
@@ -214,11 +216,42 @@ The function interpolates correction values from the [ICAO Cold Temperature Erro
 the corrected height in feet. The input height must be height above airport/reporting station elevation,
 not MSL altitude.
 
+#### Segment-based corrections for instrument approaches
+
+For instrument approaches, the FAA recommends applying corrections by segment (AIM 7-3-6). Use `calculateColdTemperatureCorrections` to get corrections for the intermediate and final segments:
+
+```kotlin
+    val fafAltitude = 2000      // FAF published altitude (MSL)
+    val mdaAltitude = 1500      // MDA/DA published altitude (MSL)
+    val airportElevation = 200  // airport elevation (MSL)
+    val temperature = -20       // celsius
+
+    val corrections = calculateColdTemperatureCorrections(
+        fafAltitude = fafAltitude,
+        mdaAltitude = mdaAltitude,
+        airportElevation = airportElevation,
+        reportedTemperatureC = temperature,
+        roundUpForSafety = true  // recommended: rounds up to next table value for final segment
+    )
+
+    // Apply corrections to published altitudes
+    val correctedFaf = corrections.correctIntermediateSegment(fafAltitude)
+    val correctedMda = corrections.correctFinalSegment(mdaAltitude)
+```
+
+The `ColdTemperatureCorrections` object contains:
+- `intermediateSegmentCorrection` — correction to apply to all fixes in the intermediate segment (IAF through FAF)
+- `finalSegmentCorrection` — correction to apply to MDA/DA and final segment stepdown fixes
+- `fafHeightAboveAirport` — height of FAF above airport elevation
+- `mdaHeightAboveAirport` — height of MDA above airport elevation (actual)
+- `mdaHeightAboveAirportRounded` — height of MDA above airport elevation (rounded up for safety, if used)
+
 The implementation follows the official FAA/ICAO rules for cold temperature altitude corrections:
 - Linear interpolation between table values for both height and temperature
-- Results rounded to nearest 10 feet per aviation standards
+- Results rounded up to nearest 10 feet per aviation standards
 - Supports all temperature ranges from +10°C to -50°C
 - Supports heights from 200 ft to 5000 ft above airport elevation
+- Segment-based method follows AIM 7-3-6 guidance for intermediate, final, and missed approach segments
 
 For detailed guidance on applying cold temperature corrections during approaches, see [CFI Notebook - Cold Temperature Operations](https://www.cfinotebook.net/notebook/aerodynamics-and-performance/cold-temperature-operations).
 
