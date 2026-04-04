@@ -1,6 +1,6 @@
 package alexmaryin.metarkt.helpers
 
-private object ColdTemperatureCorrectionTable {
+internal object ColdTemperatureCorrectionTable {
     private val heightsFt = intArrayOf(200, 300, 400, 500, 600, 700, 800, 900, 1000, 1500, 2000, 3000, 4000, 5000)
     private val temperaturesC = intArrayOf(10, 0, -10, -20, -30, -40, -50)
     private val correctionsFt = arrayOf(
@@ -14,16 +14,51 @@ private object ColdTemperatureCorrectionTable {
     )
 
     fun correctionFor(heightAboveAirportFt: Int, reportedTemperatureC: Int): Int {
-        val heightIndex = heightsFt.ceilingIndex(heightAboveAirportFt)
-        val temperatureIndex = temperaturesC.colderOrEqualIndex(reportedTemperatureC)
-        return correctionsFt[temperatureIndex][heightIndex]
+        val heightIndices = heightsFt.boundingIndices(heightAboveAirportFt)
+        val temperatureIndices = temperaturesC.boundingIndicesDescending(reportedTemperatureC)
+
+        val (hLower, hUpper) = heightIndices
+        val (tLower, tUpper) = temperatureIndices
+
+        val h0 = heightsFt[hLower]
+        val h1 = heightsFt[hUpper]
+        val t0 = temperaturesC[tLower]
+        val t1 = temperaturesC[tUpper]
+
+        val c00 = correctionsFt[tLower][hLower]
+        val c01 = correctionsFt[tLower][hUpper]
+        val c10 = correctionsFt[tUpper][hLower]
+        val c11 = correctionsFt[tUpper][hUpper]
+
+        val c0 = interpolate(heightAboveAirportFt, h0, h1, c00, c01)
+        val c1 = interpolate(heightAboveAirportFt, h0, h1, c10, c11)
+        val correction = interpolate(reportedTemperatureC, t0, t1, c0, c1)
+
+        return correction.roundToNearest10()
     }
 
-    private fun IntArray.ceilingIndex(value: Int): Int =
-        indexOfFirst { value <= it }.let { if (it == -1) lastIndex else it }
+    private fun interpolate(value: Int, v0: Int, v1: Int, c0: Int, c1: Int): Int {
+        if (v0 == v1) return c0
+        val fraction = (value - v0).toDouble() / (v1 - v0)
+        return (c0 + fraction * (c1 - c0)).toInt()
+    }
 
-    private fun IntArray.colderOrEqualIndex(value: Int): Int =
-        indexOfFirst { value >= it }.let { if (it == -1) lastIndex else it }
+    private fun Int.roundToNearest10(): Int {
+        val remainder = this % 10
+        return if (remainder >= 5) this + (10 - remainder) else this - remainder
+    }
+
+    private fun IntArray.boundingIndices(value: Int): Pair<Int, Int> {
+        val upperIndex = indexOfFirst { value <= it }.let { if (it == -1) lastIndex else it }
+        val lowerIndex = if (upperIndex > 0 && value < this[upperIndex]) upperIndex - 1 else upperIndex
+        return lowerIndex to upperIndex
+    }
+
+    private fun IntArray.boundingIndicesDescending(value: Int): Pair<Int, Int> {
+        val upperIndex = indexOfFirst { value >= it }.let { if (it == -1) lastIndex else it }
+        val lowerIndex = if (upperIndex > 0 && value > this[upperIndex]) upperIndex - 1 else upperIndex
+        return lowerIndex to upperIndex
+    }
 }
 
 /**

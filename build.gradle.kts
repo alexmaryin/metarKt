@@ -4,11 +4,11 @@ plugins {
     kotlin("multiplatform") version "2.2.0"
     id("com.vanniktech.maven.publish") version "0.34.0"
     id("com.android.library") version "8.12.3"
-    id("org.jetbrains.dokka") version "2.1.0"
+    id("org.jetbrains.dokka") version "2.2.0"
 }
 
 group = "io.github.alexmaryin.metarkt"
-version = "1.2.0"
+version = "1.2.1"
 
 kotlin {
     explicitApi()

@@ -54,18 +54,18 @@ implementation("io.github.alexmaryin.metarkt:parser:1.0.1")
 <dependency>
   <groupId>io.github.alexmaryin.metarkt</groupId>
   <artifactId>metarkt</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
 </dependency>
 ```
 
 ### Gradle
 ```groovy
-implementation 'io.github.alexmaryin.metarkt:metarkt:1.2.0'
+implementation 'io.github.alexmaryin.metarkt:metarkt:1.2.1'
 ```
 
 ### Kotlin-DSL
 ```kotlin
-implementation("io.github.alexmaryin.parser:metarkt:1.2.0")
+implementation("io.github.alexmaryin.parser:metarkt:1.2.1")
 ```
 
 ## Using parser
@@ -210,9 +210,17 @@ Apply FAA/ICAO cold-temperature correction to an indicated height above airport 
     val correctedHeight = coldTemperatureCorrectedAltitude(indicatedHeight, temperature) // return 1710
 ```
 
-The function interpolates correction values from the FAA AIM cold-temperature table and returns
+The function interpolates correction values from the [ICAO Cold Temperature Error Table](https://www.cfinotebook.net/notebook/aerodynamics-and-performance/cold-temperature-operations) and returns
 the corrected height in feet. The input height must be height above airport/reporting station elevation,
 not MSL altitude.
+
+The implementation follows the official FAA/ICAO rules for cold temperature altitude corrections:
+- Linear interpolation between table values for both height and temperature
+- Results rounded to nearest 10 feet per aviation standards
+- Supports all temperature ranges from +10°C to -50°C
+- Supports heights from 200 ft to 5000 ft above airport elevation
+
+For detailed guidance on applying cold temperature corrections during approaches, see [CFI Notebook - Cold Temperature Operations](https://www.cfinotebook.net/notebook/aerodynamics-and-performance/cold-temperature-operations).
 
 ### License
 
