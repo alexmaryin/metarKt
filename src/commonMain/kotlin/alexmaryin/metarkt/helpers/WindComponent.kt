@@ -6,5 +6,5 @@ package alexmaryin.metarkt.helpers
 public data class WindComponent(
     val headwind: Double,   // positive = headwind, negative = tailwind
     val crosswind: Double,  // always positive magnitude
-    val fromLeft: Boolean   // true if crosswind comes from the left
+    val fromLeft: Boolean   // true when the wind blows FROM the pilot's left side (standard aviation convention)
 )
